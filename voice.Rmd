@@ -1,0 +1,44 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+wavFiles <- list.files(system.file('extdata', package = 'wrassp'),
+                       pattern <- glob2rx('*.wav'), full.names = TRUE)
+```
+
+```{r}
+voice::extract_features(wavFiles)
+```
+
+```{r}
+E <- dplyr::tibble(subject_id = c(1,1,1,2,2,2,3,3,3), wav_path = wavFiles)
+E
+```
+
+```{r}
+voice::tag(E)
+```
+```{r}
+voice::tag(E, groupBy = 'subject_id')
+```
+```{r}
+url0 <- 'https://github.com/filipezabala/voiceAudios/blob/main/mp3/doremi.mp3?raw=true'
+download.file(url0, paste0(tempdir(), '/doremi.mp3'), mode = 'wb')
+```
+```{r}
+cmd <- paste0('cd ', tempdir(), ';', 
+' for i in *.[Mm][Pp]3; do ffmpeg -i "$i" -ac 1 "./${i%.*}.wav"; done')
+system(cmd)
+```
+
+```{r}
+M <- voice::extract_features(tempdir(), features = 'f0')
+summary(M)
+```
+

@@ -41,4 +41,75 @@ system(cmd)
 M <- voice::extract_features(tempdir(), features = 'f0')
 summary(M)
 ```
+```{r}
+
+```
+```{r}
+(C3 <- median(M$f0[1:150], na.rm = TRUE))
+#> [1] 129.7059
+voice::notes(C3)
+#> [1] C3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(D3 <- median(M$f0[190:280], na.rm = TRUE))
+#> [1] 143.2753
+voice::notes(D3)
+#> [1] D3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(E4 <- median(M$f0[310:380], na.rm = TRUE))
+#> [1] 320.6903
+voice::notes(E4)
+#> [1] E4
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(F3 <- median(M$f0[420:500], na.rm = TRUE))
+#> [1] 170.1356
+voice::notes(F3)
+#> [1] F3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(G3 <- median(M$f0[590:630], na.rm = TRUE))
+#> [1] 195.0839
+voice::notes(G3)
+#> [1] G3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(A3 <- median(M$f0[700:770], na.rm = TRUE))
+#> [1] 220.4526
+voice::notes(A3)
+#> [1] A3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(B3 <- median(M$f0[820:900], na.rm = TRUE))
+#> [1] 249.4395
+voice::notes(B3)
+#> [1] B3
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+(C4 <- median(M$f0[950:1100], na.rm = TRUE))
+#> [1] 261.6508
+voice::notes(C4)
+#> [1] C4
+#> 108 Levels: C0 < C#0 < D0 < D#0 < E0 < F0 < F#0 < G0 < G#0 < A0 < A#0 < ... < B8
+```
+
+```{r}
+# gather
+f0_spn <- voice::notes(c(C3,D3,E4,F3,G3,A3,B3,C4,C4))
+
+# duration
+(dur <- voice::duration(f0_spn))
+#>   note dur_line dur_ms  dur_prop
+#> 1   C3        1      5 0.1111111
+#> 2   D3        1      5 0.1111111
+#> 3   E4        1      5 0.1111111
+#> 4   F3        1      5 0.1111111
+#> 5   G3        1      5 0.1111111
+#> 6   A3        1      5 0.1111111
+#> 7   B3        1      5 0.1111111
+#> 8   C4        2     10 0.2222222
+
+# gm by Renfei Mao
+m <- gm::Music()
+m <- m +
+  gm::Meter(4, 4) +
+  gm::Line(pitches = as.list(as.character(dur$note)),
+           durations = as.list(dur$dur_line)) +
+  gm::Tempo(100)
+gm::show(m, to = c('score', 'audio'))
+```
 
